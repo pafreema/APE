@@ -1,0 +1,38 @@
+begin procedure convert-one
+  colum x 1 y 2 z 3 /file ngvla-revF.&1.cfg /line 6
+  defin char chain*120 sta*16
+  define char*4 station[nxy]
+  defin integ is ns ni
+  for i 1 to nxy
+    accept chain /colu ngvla-revf.&1.cfg /forma "A" /line 5+i
+    let is index(chain," 18 ")+4
+    let sta 'chain[is:]'
+    let ns len_trim(sta)
+    say 'sta'
+    let ni ns-2
+    let station[i] 'sta[1:1]''sta[ni:ns]'
+  next
+  sic output user-ngvla-&1.cfg
+  !
+    say "! Comment:  Strict format for the 8 next lines "
+    SAY "! RAMESDIUS    = &2"
+    SAY "! ALTITUDE  = 2124"
+    SAY "! LONGITUDE =  -107.6183"
+    SAY "! LATITUDE  =   34.0783"
+    SAY "! DIAMETER  =  18"
+    say "! NBANT     =  "'nxy'
+    say "! MODE      = GEO"
+    !
+    for i 1 to nxy
+      say x[i] y[i] z[i] 18 station[i] /format f25.12 f25.12 f25.12 i4 a6 i4 
+    next
+  sic output
+end procedure
+!
+!@ convert-one core 5000
+@ convert-one main 1000000
+!@ convert-one mid  1200000
+!@ convert-one long 10000000
+!@ convert-one spiral 40000
+!@ convert-one sba  60
+
